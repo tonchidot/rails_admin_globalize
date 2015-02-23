@@ -41,7 +41,7 @@ module RailsAdmin
             @available_locales = (I18n.available_locales - [I18n.locale])
             @available_locales = @object.available_locales if @object.respond_to?("available_locales")
             @already_translated_locales = []
-            @already_translated_locales = @object.translated_locales.map(&:to_s) if @object.respond_to?("translated_locales")
+            @already_translated_locales = @object.translated_locales.map(&:to_sym) if @object.respond_to?("translated_locales")
             @not_yet_translated_locales = @available_locales - @already_translated_locales
 
             if request.get?
@@ -50,7 +50,7 @@ module RailsAdmin
               ::Globalize.with_locale params[:target_locale] do
                 sanitize_params_for!(:update)
 
-                @object.set_attributes(params[@abstract_model.param_key])
+                @object.set_attributes(params[@abstract_model.param_key], _attr_accessible_role)
                 @authorization_adapter && @authorization_adapter.attributes_for(:update, @abstract_model).each do |name, value|
                   @object.send("#{name}=", value)
                 end
