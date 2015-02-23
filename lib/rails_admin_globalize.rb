@@ -50,7 +50,7 @@ module RailsAdmin
               ::Globalize.with_locale params[:target_locale] do
                 sanitize_params_for!(:update)
 
-                @object.set_attributes(params[@abstract_model.param_key])
+                @object.set_attributes(params[@abstract_model.param_key], _attr_accessible_role)
                 @authorization_adapter && @authorization_adapter.attributes_for(:update, @abstract_model).each do |name, value|
                   @object.send("#{name}=", value)
                 end
